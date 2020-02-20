@@ -1,6 +1,69 @@
-<h1>Editing Home</h1>
 
-<%= render 'form', home: @home %>
+  <% if home.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(homes.errors.count, "error") %> prohibited this home from being saved:</h2>
 
-<%= link_to 'Show', @home %> |
-<%= link_to 'Back', homes_path %>
+      <ul>
+      <% home.error.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<!--  ********************** -->
+  <div class="field">
+    <%= form.label :物件名 %>
+    <%= form.text_field :name, placeholder:"例：〇〇ハイツ" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :rent, "賃料" %>
+    <%= form.number_field :rent %>円
+  </div>
+
+  <div class="field">
+    <%= form.label :address, "住所" %>
+    <%= form.text_area :address, placeholder:"例：東京都XXXX" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :year, "築年数" %>
+    <%= form.number_field :year %>年
+  </div>
+
+  <div class="field">
+    <%= form.label :備考 %>
+    <%= form.text_area :remarks %>
+  </div>
+
+<span>-----------------------------------------</span>
+
+    <%= form.fields_for :stations do |station_form| %>
+
+    <p class="aaa"><b>最寄駅:<%= station_form.index.to_i + 1 %></b></p>
+
+      <div class="field">
+          <%= station_form.label :line, "路線名" %>
+          <%= station_form.text_field :line, placeholder:"例：JR山手" %>線
+      </div>
+
+      <div class="field">
+          <%= station_form.label :station, "駅名" %>
+          <%= station_form.text_field :station, placeholder:"例：品川" %>駅
+      </div>
+
+      <div class="field">
+          <%= station_form.label :minute, "徒歩分数" %>
+          <%= station_form.number_field :minute %>分
+      </div>
+
+
+<span>-----------------------------------------</span>
+      <%= station_form.link_to_remove "項目削除" %>
+    <% end %>
+       <%= form.link_to_add "項目追加",:stations %>
+
+    <div class="actions">
+      <%= form.submit "投稿する" %>
+    </div>
