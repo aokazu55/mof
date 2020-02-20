@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>物件編集</h1>
+<h1>閲覧</h1>
 <p>
   <strong>物件名:</strong>
   <%= @home.name %>
@@ -26,7 +26,7 @@
   <%= @home.remarks %>
 </p>
 
-<span>---------------------------------------------------------------</span>
+<p>--------------------------------------- </p>
 
 <% n=0 %>
 <% @home.stations.each do |station| %>
@@ -47,6 +47,5 @@
   </p>
 <% end %>
 
-
-<%= link_to '編集する', edit_home_path(@home) %> |
+<%= link_to '編集', edit_home_path %> |
 <%= link_to '戻る', homes_path %>

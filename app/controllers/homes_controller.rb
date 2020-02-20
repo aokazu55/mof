@@ -14,14 +14,13 @@ class HomesController < ApplicationController
   end
 
   def edit
-    @home.stations.new
+    # @home.stations.new
   end
 
   def create
     @home = Home.new(home_params)
     respond_to do |format|
       if @home.save
-        reset_session
         format.html { redirect_to @home, notice: 'Home was successfully created.' }
         format.json { render :show, status: :created, location: @home }
       else
