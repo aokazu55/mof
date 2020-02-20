@@ -1,66 +1,62 @@
 class HomesController < ApplicationController
-  before_action :set_home, only: [:show, :edit, :update, :destroy]
+  before_action :set_home, only: %i(show edit update destroy)
 
   def index
     @homes = Home.all
   end
 
-  def show
-  end
-
   def new
     @home = Home.new
-    @home.stations.new
-  end
-
-  def edit
-    # @home.stations.new
+    @home.stations.build
   end
 
   def create
     @home = Home.new(home_params)
-    respond_to do |format|
+    if params[:back]
+      render :new # これがないと、create.html.erbを表示しようとする
+    else
       if @home.save
-        format.html { redirect_to @home, notice: 'Home was successfully created.' }
-        format.json { render :show, status: :created, location: @home }
+        redirect_to homes_path,  notice:"登録しました！"
       else
-        format.html { render :new }
-        format.json { render json: @home.errors, status: :unprocessable_entity }
+        render :new
       end
     end
   end
 
+  def show
+  end
+
+  def edit
+    if @home.stations.last.minute.blank? &&
+       @home.stations.last.line.blank? &&
+       @home.stations.last.station.blank?
+    else
+       @home.stations.build
+    end
+  end
+
   def update
-    respond_to do |format|
-      if params[:back]
-        render:edit
-      else
-          if @home.update(home_params)
-          format.html { redirect_to @home, notice: 'Home was successfully updated.' }
-          format.json { render :show, status: :ok, location: @home }
-          else
-          format.html { render :edit }
-          format.json { render json: @home.errors, status: :unprocessable_entity }
-          end
-      end
+    if @home.update(home_params)
+      redirect_to homes_path, notice:"編集しました！"
+    else
+      render :edit
     end
   end
 
   def destroy
     @home.destroy
-    respond_to do |format|
-      format.html { redirect_to homes_url, notice: 'Home was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to homes_path, notice:"削除しました！"
   end
 
   private
+
   def set_home
-    @home = Home.find(params[:id])
+    @home  = Home.find(params[:id])
   end
 
   def home_params
     params.require(:home).permit(:name, :rent, :address, :year, :remarks,
-      stations_attributes:[:line, :station, :minute, :_destroy, :id])
+                                  stations_attributes: %i(id line station minute house_id))
   end
+
 end
