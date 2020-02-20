@@ -16,7 +16,7 @@ class HomesController < ApplicationController
       render :new # これがないと、create.html.erbを表示しようとする
     else
       if @home.save
-        redirect_to homes_path,  notice:"登録しました！"
+        redirect_to homes_path,  notice:"登録しました!！"
       else
         render :new
       end
